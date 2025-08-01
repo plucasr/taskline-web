@@ -4,7 +4,7 @@ Day 1 = 2026-11-06.
 
 ## Phase 1 — Foundations (day 1–14)
 - [ ] D1  `create-next-app` baseline, CI green
-- [ ] D2  Folder structure: app/(auth), app/boards, components/, lib/api
+- [x] D2  Folder structure: app/(auth), app/boards, components/, lib/api
 - [ ] D3  ESLint + Prettier strict config
 - [ ] D4  Design tokens: CSS variables, base layout
 - [ ] D5  API client layer for taskline-api (typed fetch wrapper)
