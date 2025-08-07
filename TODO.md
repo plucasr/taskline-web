@@ -5,7 +5,7 @@ Day 1 = 2026-11-06.
 ## Phase 1 — Foundations (day 1–14)
 - [ ] D1  `create-next-app` baseline, CI green
 - [x] D2  Folder structure: app/(auth), app/boards, components/, lib/api
-- [ ] D3  ESLint + Prettier strict config
+- [x] D3  ESLint + Prettier strict config
 - [ ] D4  Design tokens: CSS variables, base layout
 - [ ] D5  API client layer for taskline-api (typed fetch wrapper)
 - [ ] D6  Sign up / login pages wired to JWT endpoints
