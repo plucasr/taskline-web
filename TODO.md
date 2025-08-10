@@ -6,13 +6,13 @@ Day 1 = 2026-11-06.
 - [ ] D1  `create-next-app` baseline, CI green
 - [x] D2  Folder structure: app/(auth), app/boards, components/, lib/api
 - [x] D3  ESLint + Prettier strict config
-- [ ] D4  Design tokens: CSS variables, base layout
-- [ ] D5  API client layer for taskline-api (typed fetch wrapper)
-- [ ] D6  Sign up / login pages wired to JWT endpoints
-- [ ] D7  Auth context + token storage
-- [ ] D8  Boards list page (fetch + render)
-- [ ] D9  Board page layout: columns
-- [ ] D10 Card components (basic render)
+- [x] D4  Design tokens: CSS variables, base layout
+- [x] D5  API client layer for taskline-api (typed fetch wrapper)
+- [x] D6  Sign up / login pages wired to JWT endpoints
+- [x] D7  Auth context + token storage
+- [x] D8  Boards list page (fetch + render)
+- [x] D9  Board page layout: columns
+- [x] D10 Card components (basic render)
 - [ ] D11 Loading / error states
 - [ ] D12 README: screenshots placeholder, setup
 - [ ] D13 Env config (NEXT_PUBLIC_API_URL)
