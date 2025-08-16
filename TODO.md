@@ -25,10 +25,10 @@ Day 1 = 2026-11-06.
 - [ ] D18 Card create/edit modal
 - [ ] D19 Card assignee + due date UI
 - [ ] D20 Card comments UI
-- [ ] D21 Action Cable client: JWT auth connection
-- [ ] D22 Presence indicator (who is online)
-- [ ] D23 Room list sidebar
-- [ ] D24 Room chat UI (send/receive via channel)
+- [x] D21 Action Cable client: JWT auth connection
+- [x] D22 Presence indicator (who is online)
+- [x] D23 Room list sidebar
+- [x] D24 Room chat UI (send/receive via channel)
 - [ ] D25 WebRTC: getUserMedia + local preview
 - [ ] D26 Signaling client (offer/answer/ICE over WS)
 - [ ] D27 RTCPeerConnection: 1-to-1 voice call

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getBoard, createCard, type BoardDetail } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import { Presence } from "@/components/Presence";
+import { RoomChat } from "@/components/RoomChat";
 
 export default function BoardPage() {
   const params = useParams<{ id: string }>();
@@ -61,6 +63,7 @@ export default function BoardPage() {
   return (
     <main>
       <h1>{board.name}</h1>
+      <Presence token={session.token} boardId={board.id} selfId={session.user.id} />
       <div style={{ display: "flex", gap: 16 }}>
         {board.columns.map((column) => (
           <section key={column.id} style={{ minWidth: 220 }}>
@@ -79,6 +82,7 @@ export default function BoardPage() {
           </section>
         ))}
       </div>
+      <RoomChat token={session.token} boardId={board.id} />
     </main>
   );
 }

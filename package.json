@@ -10,17 +10,19 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@rails/actioncable": "^8.1.401",
     "next": "15",
     "react": "19",
     "react-dom": "19"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^22",
+    "@types/rails__actioncable": "^8.0.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15",
-    "prettier": "^3"
+    "prettier": "^3",
+    "typescript": "^5"
   }
 }

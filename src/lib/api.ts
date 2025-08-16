@@ -95,3 +95,30 @@ export function createCard(token: string, boardId: number, columnId: number, tit
     body: JSON.stringify({ title, position: 0 }),
   });
 }
+
+export interface Room {
+  id: number;
+  name: string;
+}
+
+export interface RoomMessage {
+  id: number;
+  body: string;
+  created_at: string;
+  user: { id: number; email: string };
+}
+
+export function listRooms(token: string, boardId: number): Promise<Room[]> {
+  return request<Room[]>(`/api/v1/boards/${boardId}/rooms`, token);
+}
+
+export function createRoom(token: string, boardId: number, name: string): Promise<Room> {
+  return request<Room>(`/api/v1/boards/${boardId}/rooms`, token, {
+    method: "POST",
+    body: JSON.stringify({ name }),
+  });
+}
+
+export function listMessages(token: string, boardId: number, roomId: number): Promise<RoomMessage[]> {
+  return request<RoomMessage[]>(`/api/v1/boards/${boardId}/rooms/${roomId}/messages`, token);
+}
