@@ -122,3 +122,25 @@ export function createRoom(token: string, boardId: number, name: string): Promis
 export function listMessages(token: string, boardId: number, roomId: number): Promise<RoomMessage[]> {
   return request<RoomMessage[]>(`/api/v1/boards/${boardId}/rooms/${roomId}/messages`, token);
 }
+
+export function moveCard(
+  token: string,
+  boardId: number,
+  fromColumnId: number,
+  cardId: number,
+  toColumnId: number,
+  position: number,
+): Promise<Card> {
+  return request<Card>(
+    `/api/v1/boards/${boardId}/columns/${fromColumnId}/cards/${cardId}/move`,
+    token,
+    { method: "PATCH", body: JSON.stringify({ to_column_id: toColumnId, position }) },
+  );
+}
+
+export function createColumn(token: string, boardId: number, name: string, position: number): Promise<BoardColumn> {
+  return request<BoardColumn>(`/api/v1/boards/${boardId}/columns`, token, {
+    method: "POST",
+    body: JSON.stringify({ name, position }),
+  });
+}

@@ -2,10 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getBoard, createCard, type BoardDetail } from "@/lib/api";
+import { DndContext, type DragEndEvent } from "@dnd-kit/core";
+import {
+  getBoard,
+  createCard,
+  moveCard,
+  createColumn,
+  type BoardDetail,
+  type Card,
+} from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { Presence } from "@/components/Presence";
 import { RoomChat } from "@/components/RoomChat";
+import { DraggableCard } from "@/components/board/DraggableCard";
+import { DroppableColumn } from "@/components/board/DroppableColumn";
 
 export default function BoardPage() {
   const params = useParams<{ id: string }>();
@@ -14,6 +24,7 @@ export default function BoardPage() {
   const [board, setBoard] = useState<BoardDetail | null>(null);
   const [error, setError] = useState("");
   const [cardTitles, setCardTitles] = useState<Record<number, string>>({});
+  const [newColumn, setNewColumn] = useState("");
 
   useEffect(() => {
     if (loading) {
@@ -46,6 +57,58 @@ export default function BoardPage() {
     setCardTitles({ ...cardTitles, [columnId]: "" });
   }
 
+  async function onAddColumn(event: React.FormEvent) {
+    event.preventDefault();
+    if (!session || !board) {
+      return;
+    }
+    const name = newColumn.trim();
+    if (!name) {
+      return;
+    }
+    const column = await createColumn(session.token, board.id, name, board.columns.length);
+    setBoard({ ...board, columns: [...board.columns, { ...column, cards: [] }] });
+    setNewColumn("");
+  }
+
+  function onDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!session || !board || !over || active.id === over.id) {
+      return;
+    }
+
+    const cardId = Number(active.id);
+    const targetColumnId = Number(over.id);
+    const fromColumn = board.columns.find((column) => column.cards.some((card) => card.id === cardId));
+    const toColumn = board.columns.find((column) => column.id === targetColumnId);
+    if (!fromColumn || !toColumn) {
+      return;
+    }
+
+    const card = fromColumn.cards.find((item) => item.id === cardId) as Card;
+    const previous = board;
+
+    setBoard({
+      ...board,
+      columns: board.columns.map((column) => {
+        if (column.id === fromColumn.id) {
+          return { ...column, cards: column.cards.filter((item) => item.id !== cardId) };
+        }
+        if (column.id === toColumn.id) {
+          return { ...column, cards: [...column.cards, { ...card, column_id: targetColumnId }] };
+        }
+        return column;
+      }),
+    });
+
+    moveCard(session.token, board.id, fromColumn.id, cardId, targetColumnId, toColumn.cards.length).catch(
+      (err) => {
+        setBoard(previous);
+        setError(err instanceof Error ? err.message : "Move failed");
+      },
+    );
+  }
+
   if (loading || !session) {
     return <main>Loading…</main>;
   }
@@ -64,24 +127,34 @@ export default function BoardPage() {
     <main>
       <h1>{board.name}</h1>
       <Presence token={session.token} boardId={board.id} selfId={session.user.id} />
-      <div style={{ display: "flex", gap: 16 }}>
-        {board.columns.map((column) => (
-          <section key={column.id} style={{ minWidth: 220 }}>
-            <h2>{column.name}</h2>
-            <ul>
-              {column.cards.map((card) => (
-                <li key={card.id}>{card.title}</li>
-              ))}
-            </ul>
+      <DndContext onDragEnd={onDragEnd}>
+        <div style={{ display: "flex", gap: 16 }}>
+          {board.columns.map((column) => (
+            <DroppableColumn key={column.id} id={column.id}>
+              <h2>{column.name}</h2>
+              <ul>
+                {column.cards.map((card) => (
+                  <DraggableCard key={card.id} card={card} />
+                ))}
+              </ul>
+              <input
+                placeholder="Add card"
+                value={cardTitles[column.id] ?? ""}
+                onChange={(e) => setCardTitles({ ...cardTitles, [column.id]: e.target.value })}
+              />
+              <button onClick={() => onAddCard(column.id)}>Add</button>
+            </DroppableColumn>
+          ))}
+          <form onSubmit={onAddColumn}>
             <input
-              placeholder="Add card"
-              value={cardTitles[column.id] ?? ""}
-              onChange={(e) => setCardTitles({ ...cardTitles, [column.id]: e.target.value })}
+              placeholder="New column"
+              value={newColumn}
+              onChange={(e) => setNewColumn(e.target.value)}
             />
-            <button onClick={() => onAddCard(column.id)}>Add</button>
-          </section>
-        ))}
-      </div>
+            <button type="submit">Create</button>
+          </form>
+        </div>
+      </DndContext>
       <RoomChat token={session.token} boardId={board.id} />
     </main>
   );

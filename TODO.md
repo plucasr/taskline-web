@@ -19,9 +19,9 @@ Day 1 = 2026-11-06.
 - [ ] D14 Phase 1 retro
 
 ## Phase 2 — Depth (day 15–40)
-- [ ] D15 dnd-kit setup: drag cards between columns
-- [ ] D16 Optimistic updates for card moves
-- [ ] D17 Column create/rename UI
+- [x] D15 dnd-kit setup: drag cards between columns
+- [x] D16 Optimistic updates for card moves
+- [x] D17 Column create/rename UI
 - [ ] D18 Card create/edit modal
 - [ ] D19 Card assignee + due date UI
 - [ ] D20 Card comments UI
